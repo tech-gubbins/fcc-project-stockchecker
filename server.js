@@ -10,6 +10,22 @@ const runner            = require('./test-runner');
 
 const app = express();
 
+const helmet = require("helmet");
+
+app.use(helmet({
+  frameguard: {
+    action: 'deny'
+  },
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'self'"],
+      styleSrc: ["'self'"],
+    }
+  },
+  dnsPrefetchControl: false,
+}))
+
 app.use('/public', express.static(process.cwd() + '/public'));
 
 app.use(cors({origin: '*'})); //For FCC testing purposes only
